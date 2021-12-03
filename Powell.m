@@ -3,59 +3,88 @@ function A = Powell(x0, penalidade)
     count = 1;
     vet_x{count} = x0;
     
-    while count < 1E5
-        
-    end
-end
-
-clc
-clear all
-
-tic
-
-func([0;8]);
-
-
-tol = 1E-3;
-
-count = 1;
-x0 = [0.01;-0.1];
-vet_x{count} = x0;
-
-count = count + 1;
-d = [1;0];
-vet_x{count} = Secaoaurea(@func ,d , vet_x{count-1});
-
-count = count + 1;
-d = [0;1];
-vet_x{count} = Secaoaurea(@func ,d , vet_x{count-1});
-
-while count < 1E3
-    
-    d = vet_x{count} - vet_x{count-2};
     count = count + 1;
-    vet_x{count} = Secaoaurea(@func, d, vet_x{count-1});
-    %disp(vet_x{count});  
-
-    if abs(gfunc(vet_x{count})) < tol
-        disp('Gradiente menor que a tolerância -> FIM')
-        break
+    d = [1;0];
+    vet_x{count} = Secaoaurea(@func ,d , vet_x{count-1}, penalidade);
+    if abs(func_penalidade(vet_x{count},penalidade) - func_penalidade(vet_x{count-1},penalidade)) < tol
+        % disp('Gradiente menor que a tolerância -> FIM')
+        A = vet_x{count};
+        return
     end
 
+    count = count + 1;
+    d = [0;1];
+    vet_x{count} = Secaoaurea(@func ,d , vet_x{count-1}, penalidade);
+
+    while count < 1E3
+    
+        d = vet_x{count} - vet_x{count-2};
+        count = count + 1;
+        vet_x{count} = Secaoaurea(@func, d, vet_x{count-1}, penalidade);
+        %disp(vet_x{count}); 
+        
+        if abs(func_penalidade(vet_x{count},penalidade) - func_penalidade(vet_x{count-1},penalidade)) < tol
+            % disp('Gradiente menor que a tolerância -> FIM')
+            A = vet_x{count};
+            break
+        end
+
+%         if abs(gfunc(vet_x{count})) < tol
+%             disp('Gradiente menor que a tolerância -> FIM')
+%             break
+%         end
+
+    end
 end
 
-disp('---------------------------');
-disp('Ponto de mínimo:');
-disp(vet_x{count});
-disp('---------------------------');
-disp('Valor da função no ponto de mínimo:');
-disp(func(vet_x{count}));
-disp('---------------------------');
-disp('Gradiente da função no ponto de mínimo:');
-disp(gfunc(vet_x{count}));
-disp('---------------------------');
-
-toc
+% clc
+% clear all
+% 
+% tic
+% 
+% func([0;8]);
+% 
+% 
+% tol = 1E-3;
+% 
+% count = 1;
+% x0 = [0.01;-0.1];
+% vet_x{count} = x0;
+% 
+% count = count + 1;
+% d = [1;0];
+% vet_x{count} = Secaoaurea(@func ,d , vet_x{count-1});
+% 
+% count = count + 1;
+% d = [0;1];
+% vet_x{count} = Secaoaurea(@func ,d , vet_x{count-1});
+% 
+% while count < 1E3
+%     
+%     d = vet_x{count} - vet_x{count-2};
+%     count = count + 1;
+%     vet_x{count} = Secaoaurea(@func, d, vet_x{count-1});
+%     %disp(vet_x{count});  
+% 
+%     if abs(gfunc(vet_x{count})) < tol
+%         disp('Gradiente menor que a tolerância -> FIM')
+%         break
+%     end
+% 
+% end
+% 
+% disp('---------------------------');
+% disp('Ponto de mínimo:');
+% disp(vet_x{count});
+% disp('---------------------------');
+% disp('Valor da função no ponto de mínimo:');
+% disp(func(vet_x{count}));
+% disp('---------------------------');
+% disp('Gradiente da função no ponto de mínimo:');
+% disp(gfunc(vet_x{count}));
+% disp('---------------------------');
+% 
+% toc
 
 
 % --------------FUNÇÃO 1--------------
