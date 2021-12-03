@@ -1,5 +1,4 @@
 function alfaFIM = Secaoaurea(d , x_zero, penalidade)
-
     e = 1E-8;
     tol = 1E-6;
     iterMAX=1E4;
