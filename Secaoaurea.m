@@ -6,7 +6,6 @@ function alfaFIM = Secaoaurea(d , x_zero, penalidade)
     D_alfa = 0.01;
     alfa = 1;
     Ra = (sqrt(5)-1)/2;
-    mudaDirecao=0; 
     count = 1;
     aux=true;
 
@@ -15,7 +14,6 @@ function alfaFIM = Secaoaurea(d , x_zero, penalidade)
 
     if func_penalidade(x_zero-e*d, penalidade) < func_penalidade(x_zero+e*d, penalidade)
         d=-d;
-        mudaDirecao=1;
     end
 
     while aux && count < iterMAX
@@ -73,7 +71,6 @@ function alfaFIM = Secaoaurea(d , x_zero, penalidade)
         % alfaM é o mínimo
         if abs(alfaU - alfaL) <= tol
             alfaM = (alfaL + alfaU)/2;
-            alfaFIM = alfaM;
             alfaFIM = alfaM;
             break
         end
