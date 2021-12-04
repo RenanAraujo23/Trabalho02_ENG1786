@@ -1,10 +1,12 @@
 function A=Newton(x0, penalidade)
+    syms x1 x2
     tol = 1E-5;
     count = 1;
     vet_x{count} = x0;
     
     while count < 1E5
-        H = Qfunc(vet_x{count});
+        H = hessian(func_x([x1, x2]));
+        H = subs(H, [x1; x2], vet_x{count});
         S = inv(H);
 
         g = gfunc(vet_x{count});
@@ -13,6 +15,10 @@ function A=Newton(x0, penalidade)
  
         count = count + 1;
         vet_x{count} = Secaoaurea(d , vet_x{count-1}, penalidade);
+        if abs(gfunc(vet_x{count})) < tol
+            disp('Gradiente menor que a tolerância -> FIM')
+            break
+        end
         
         if abs(func_penalidade(vet_x{count},penalidade) - func_penalidade(vet_x{count-1},penalidade)) < tol
             A = vet_x{count};
