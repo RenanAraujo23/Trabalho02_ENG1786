@@ -1,12 +1,8 @@
-clc
 clear
 
 tic
-
 count = 1;
-
 y_resticao = 0;
-
 k = 0;
 rp(count)=1;
 beta=10;
@@ -32,7 +28,7 @@ while count < 10E5
     
     % Minimizando   
     count = count + 1;    
-    vet_x{count} = Univariante(vet_x{count-1}, penalidade);
+    vet_x{count} = Newton(vet_x{count-1}, penalidade);
     
     % Testar se minimizou a restrição
 
