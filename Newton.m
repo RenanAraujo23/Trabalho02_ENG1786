@@ -1,49 +1,69 @@
-clc
-clear all
-
-tic
-
-tol = 1E-5;
-
-count = 1;
-x0 = [0.01;-0.1];
-vet_x{count} = x0;
-
-while count < 1E6
+function A=Newton(x0, penalidade)
+    tol = 1E-5;
+    count = 1;
+    vet_x{count} = x0;
     
-    
-    H = Qfunc(vet_x{count});
-    S = inv(H);
+    while count < 1E5
+        H = Qfunc(vet_x{count});
+        S = inv(H);
 
-    g = gfunc(vet_x{count});
-    g_transposta = g.';
+        g = gfunc(vet_x{count});
 
-    d = -S*g;
+        d = -S*g;
  
-    count = count + 1;
-    vet_x{count} = Secaoaurea(@func ,d , vet_x{count-1}); 
-    
-    %disp(vet_x{count});
-    
-    if abs(gfunc(vet_x{count})) < tol
-        disp('Gradiente menor que a tolerância -> FIM')
-        break
-    end
-
+        count = count + 1;
+        vet_x{count} = Secaoaurea(d , vet_x{count-1}, penalidade);
+        
+        if abs(func_penalidade(vet_x{count},penalidade) - func_penalidade(vet_x{count-1},penalidade)) < tol
+            A = vet_x{count};
+            break
+        end
+    end    
 end
 
-disp('---------------------------');
-disp('Ponto de mínimo:');
-disp(vet_x{count});
-disp('---------------------------');
-disp('Valor da função no ponto de mínimo:');
-disp(func(vet_x{count}));
-disp('---------------------------');
-disp('Gradiente da função no ponto de mínimo:');
-disp(gfunc(vet_x{count}));
-disp('---------------------------');
-
-toc
+% tic
+% 
+% tol = 1E-5;
+% 
+% count = 1;
+% x0 = [0.01;-0.1];
+% vet_x{count} = x0;
+% 
+% while count < 1E6
+%     
+%     
+%     H = Qfunc(vet_x{count});
+%     S = inv(H);
+% 
+%     g = gfunc(vet_x{count});
+%     g_transposta = g.';
+% 
+%     d = -S*g;
+%  
+%     count = count + 1;
+%     vet_x{count} = Secaoaurea(@func ,d , vet_x{count-1}); 
+%     
+%     %disp(vet_x{count});
+%     
+%     if abs(gfunc(vet_x{count})) < tol
+%         disp('Gradiente menor que a tolerância -> FIM')
+%         break
+%     end
+% 
+% end
+% 
+% disp('---------------------------');
+% disp('Ponto de mínimo:');
+% disp(vet_x{count});
+% disp('---------------------------');
+% disp('Valor da função no ponto de mínimo:');
+% disp(func(vet_x{count}));
+% disp('---------------------------');
+% disp('Gradiente da função no ponto de mínimo:');
+% disp(gfunc(vet_x{count}));
+% disp('---------------------------');
+% 
+% toc
 
 % --------------FUNÇÃO 1--------------
 
